@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Hintergrund transparent -->
+  <g>
+    <!-- Strahlen -->
+    <line x1="32" y1="2" x2="32" y2="10" stroke="#FFD700" stroke-width="3"/>
+    <line x1="32" y1="54" x2="32" y2="62" stroke="#FFD700" stroke-width="3"/>
+    <line x1="2" y1="32" x2="10" y2="32" stroke="#FFD700" stroke-width="3"/>
+    <line x1="54" y1="32" x2="62" y2="32" stroke="#FFD700" stroke-width="3"/>
+    <line x1="10" y1="10" x2="16" y2="16" stroke="#FFD700" stroke-width="3"/>
+    <line x1="54" y1="10" x2="48" y2="16" stroke="#FFD700" stroke-width="3"/>
+    <line x1="10" y1="54" x2="16" y2="48" stroke="#FFD700" stroke-width="3"/>
+    <line x1="54" y1="54" x2="48" y2="48" stroke="#FFD700" stroke-width="3"/>
+    
+    <!-- Glühbirne -->
+    <circle cx="32" cy="26" r="14" fill="#FFD700" stroke="#333" stroke-width="2"/>
+    
+    <!-- Glanz -->
+    <circle cx="26" cy="20" r="4" fill="#fff" opacity="0.6"/>
+    
+    <!-- Filament -->
+    <path d="M26 28 Q32 34 38 28" stroke="#333" stroke-width="2" fill="none"/>
+    
+    <!-- Sockel -->
+    <rect x="26" y="40" width="12" height="8" fill="#888" stroke="#333" stroke-width="2"/>
+    <line x1="26" y1="42" x2="38" y2="42" stroke="#333" stroke-width="1"/>
+    <line x1="26" y1="44" x2="38" y2="44" stroke="#333" stroke-width="1"/>
+    <line x1="26" y1="46" x2="38" y2="46" stroke="#333" stroke-width="1"/>
+  </g>
+</svg>

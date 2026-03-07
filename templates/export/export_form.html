@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- export_form.html -->
+<form method="post">
+  <label for="language">Sprache / Language:</label>
+  <select name="language" id="language">
+    <option value="DE">Deutsch</option>
+    <option value="EN">English</option>
+  </select>
+
+  <!-- Skills-Auswahl -->
+  <div id="skill-container"></div>
+
+  <label for="export_type">Export als:</label>
+  <select name="export_type">
+    <option value="pdf">PDF</option>
+    <option value="docx">DOCX</option>
+    <option value="html">HTML</option>
+  </select>
+
+  <button type="submit">Export</button>
+</form>
+
+<script>
+const allSkills = [{% for s in skills %}"{{ s.name }}",{% endfor %}];
+  const container = document.getElementById("skill-container");
+  const selected_skills=[];
+  const div = document.createElement("div");
+  div.className="task-block";
+  div.innerHTML = `
+    <label>Skills auswählen:
+      <select name="skills" id="skills" multiple>
+        ${allSkills.map(s=>`<option value="${s}" ${selected_skills.includes(s)?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </label>
+  `;
+  container.appendChild(div);
+
+  new Choices(`#skills`, { removeItemButton: true });
+</script>
+{% endblock %}

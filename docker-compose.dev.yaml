@@ -1,0 +1,16 @@
+services:
+  cvbuilder:
+    build: .
+    container_name: cvbuilder_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data   # Mount des Data-Verzeichnisses
+      - ./run.py:/app/run.py
+      - ./app:/app/app
+      - ./templates:/app/templates
+      - ./static:/app/static
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1

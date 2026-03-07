@@ -1,0 +1,6 @@
+<div class="certificate">
+    {% if c.badge_img %}
+    <a href="{{ c.url}}"><img src="{{ request.url_root }}/{{ url_for('static', filename=c.badge_img) }}" alt="{{ c.badge }}"></a>
+    {% endif %}
+    <div>{{ c.code }} - {{ c.badge }} - {{ c.issuer }}</div>
+</div>

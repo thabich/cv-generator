@@ -1,0 +1,160 @@
+<!-- Version: CV-PDF Styles v3.0, optimiert für WeasyPrint -->
+<style>
+body {
+  font-family: Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #212121;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+header {
+  position: running(header);
+  padding: 12px 10px;
+  margin-top: 1cm;
+  height: 100px;              /* feste Höhe */
+  border-bottom: 1px solid #D5DBDB;
+}
+header h1 {
+  margin: 0;
+  font-size: 18pt;
+  font-weight: bold;
+  color: #2C3E50;
+}
+header .contact {
+  font-size: 10pt;
+  margin-top: 4px;
+  color: #7F8C8D;
+}
+header .contact div {
+  margin-top: 2px;
+}
+
+/* Footer */
+footer {
+  position: running(footer);
+  height: 40px;              /* feste Höhe */
+  font-size: 9pt;
+  color: #7F8C8D;
+  text-align: center;
+  border-top: 1px solid #D5DBDB;
+  padding-top: 4px;
+}
+
+/* Abschnittstitel */
+h2 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-size: 14pt;
+  color: #3A539B;
+  border-bottom: 1px solid #D5DBDB;
+  padding-bottom: 2px;
+}
+
+/* Projekte */
+.project {
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border: 1px solid #D5DBDB;
+  border-radius: 3px;
+  background: #fff;
+}
+.project-title {
+  font-size:1.5em;
+  font-weight: bold;
+  color: #004E78;
+}
+
+.project-role {
+  color: #0077b8;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 0.2em;
+}
+
+.project-period {
+  color: #555;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.project-tasks {
+  padding-inline-start: 0px;
+  list-style-type: none;
+}
+
+.project-task {
+  margin-top: 40px;
+  margin-left: 0px;
+  list-style: none; /* Standard-Bullet abschalten */
+}
+.project-task h1 {
+    font-size: 1.1em;
+    color: #3593CB;
+}
+
+/* Innere Unterpunkte */
+.project-task ul {
+  list-style: none; /* Bullet weg */
+  margin: 0;
+  padding: 0;
+  padding-inline-start: 40px;
+}
+
+.project-task ul li {
+  padding-left: 2em;   /* Platz für Symbol */
+  text-indent: -2em;   /* hängender Einzug */
+  margin-top: 0.5em;
+
+}
+
+.project-task ul li::before {
+  content: "";
+  background: url("{{ request.url_root }}{{ url_for('static', filename='list-icon.svg') }}") no-repeat center center;
+  background-size: 1.5em 1.5em; /* skalierbar */
+  width: 1.5em;
+  height: 1.5em;
+  display: inline-block;
+  margin-right: 0.5em;
+  position: relative;
+  top: 0.5em; 
+}
+
+
+
+.project-skills {
+  margin-top: 6px;
+  background-color: #EAF2F8;
+  color: #1B4F72;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-size: 10.5pt;
+  display: inline-block;
+}
+
+/* Zertifikate */
+.certificate {
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border: 1px solid #E5E7E9;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+}
+.certificate img {
+  width: 60px;
+  margin-right: 8px;
+}
+
+/* PDF Seitenformat */
+@page {
+  size: A4;
+  margin: 2cm;
+  		padding-top: 2cm;
+  		padding-bottom: 1cm;
+  @top-left { content: element(header); margin-top: 1cm; }   /* Header linksbündig */
+  @bottom-center { content: element(footer); } /* Footer mittig */
+}
+</style>

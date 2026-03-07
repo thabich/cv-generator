@@ -1,0 +1,38 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 2rem;
+  background: #f7f7f7;
+  color:#333;
+}
+
+.container { max-width:1200px; margin:auto; background:white; padding:2rem; border-radius:5px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+
+h1,h2,h3 { color:#004080; margin-bottom:0.5rem; }
+
+table { width:100%; border-collapse:collapse; margin-bottom:1.5rem; }
+th,td { border:1px solid #aaa; padding:8px; text-align:left; }
+th { background:#e0f0ff; }
+
+input[type=text], textarea, select {
+  width:100%;
+  padding:0.4rem;
+  margin:0.2rem 0;
+  border:1px solid #ccc;
+  border-radius:3px;
+  font-size:1rem;
+}
+
+textarea { min-height:4em; resize:vertical; }
+
+button { padding:0.4rem 0.8rem; margin:0.2rem; background:#004080; color:white; border:none; border-radius:3px; cursor:pointer; }
+button:hover { background:#0066cc; }
+
+.skill-badge {
+  background:#cce5cc;
+  padding:2px 6px;
+  border-radius:3px;
+  margin:0 2px;
+  display:inline-block;
+  font-size:0.9em;
+}
+
