@@ -1,0 +1,200 @@
+[
+  {
+    "code": "AZ-104",
+    "issuer": "Microsoft",
+    "badge": "Microsoft Certified: Azure Administrator Associate",
+    "url": "https://learn.microsoft.com/en-us/users/thorstenhabich-2251/credentials/60612790d0cad167",
+    "from": "2025-11-13",
+    "until": "2026-11-14",
+    "badge_img": "https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg",
+    "skills": ["Azure", "Cloud Administration", "IAM"]
+  },
+  {
+    "code": "AZ-305",
+    "issuer": "Microsoft",
+    "badge": "Microsoft Certified: Azure Solutions Architect Expert",
+    "url": "https://learn.microsoft.com/api/credentials/share/en-us/ThorstenHabich-2251/9BA7C18DE83160F8",
+    "from": "2025-11-20",
+    "until": "2026-11-21",
+    "badge_img": "https://learn.microsoft.com/api/credentials/share/en-us/ThorstenHabich-2251/9BA7C18DE83160F8",
+    "skills": ["Azure", "Architecture", "Solution Design", "Networking"]
+  },
+  {
+    "code": "AZ-500",
+    "issuer": "Microsoft",
+    "badge": "Microsoft Certified: Azure Security Engineer Associate",
+    "url": "https://learn.microsoft.com/api/credentials/share/en-us/ThorstenHabich-2251/396245508FB917D1",
+    "from": "2025-11-26",
+    "until": "2026-11-27",
+    "badge_img": "https://images.credly.com/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png",
+    "skills": ["Azure", "Security", "IAM", "Policies"]
+  },
+  {
+    "code": "CCA",
+    "issuer": "The Linux Foundation",
+    "badge": "Cilium Certified Associate",
+    "url": "https://www.credly.com/badges/dcb7cf2a-279f-4f27-88bf-dec5cbcc3461",
+    "from": "2025-12-25",
+    "until": "2027-12-24",
+    "badge_img": "https://images.credly.com/images/729367b3-0344-4b00-a6da-53e1807f808a/image.png",
+    "skills": ["Cilium", "Networking", "Linux", "Cloud"]
+  },
+  {
+    "code": "CAPA",
+    "issuer": "The Linux Foundation",
+    "badge": "Certified Argo Project Associate",
+    "url": "https://www.credly.com/badges/15628adb-d6a9-4d10-90eb-78659755b9d2",
+    "from": "2025-12-19",
+    "until": "2027-12-18",
+    "badge_img": "https://images.credly.com/images/12624f9e-6b4a-43f0-b7a2-afb2c6cf8059/image.png",
+    "skills": ["Argo", "CI/CD", "GitOps", "Kubernetes"]
+  },
+  {
+    "code": "CBA",
+    "issuer": "The Linux Foundation",
+    "badge": "Certified Backstage Associate",
+    "url": "https://www.credly.com/badges/63c7b2e3-9c79-4cd3-b68e-a93c4a9530ec",
+    "from": "2025-12-22",
+    "until": "2027-12-21",
+    "badge_img": "https://images.credly.com/images/d84e4fb0-dc7f-4d79-b1eb-a8a973da4965/image.png",
+    "skills": ["Backstage", "DevOps Tooling", "CI/CD"]
+  },
+  {
+    "code": "CGOA",
+    "issuer": "The Linux Foundation",
+    "badge": "Certified GitOps Associate",
+    "url": "https://www.credly.com/badges/fac067a4-361c-4428-a481-b563c579c9d3",
+    "from": "2025-12-18",
+    "until": "2027-12-17",
+    "badge_img": "https://images.credly.com/images/7219d055-4e97-439c-b244-8fbe885fa06b/image.png",
+    "skills": ["GitOps", "CI/CD", "Kubernetes", "Automation"]
+  },
+  {
+    "code": "CKA",
+    "issuer": "The Linux Foundation",
+    "badge": "Certified Kubernetes Administrator",
+    "url": "https://www.credly.com/badges/1b732aeb-0ba0-4298-99e7-cc0fe92c62ce",
+    "from": "2025-12-05",
+    "until": "2027-12-04",
+    "badge_img": "https://images.credly.com/images/8b8ed108-e77d-4396-ac59-2504583b9d54/cka_from_cncfsite__281_29.png",
+    "skills": ["Kubernetes", "Cluster Management", "Linux", "Containers"]
+  },
+  {
+    "code": "CKAD",
+    "issuer": "The Linux Foundation",
+    "badge": "Certified Kubernetes Application Developer",
+    "url": "https://www.credly.com/badges/0e6106e1-cae2-4e75-9078-71c294433468",
+    "from": "2025-12-09",
+    "until": "2027-12-08",
+    "badge_img": "https://images.credly.com/images/d7d4ddc8-7df8-4c03-9343-507b51e0ef99/image.png",
+    "skills": ["Kubernetes", "Applications", "Helm", "CI/CD"]
+  },
+  {
+    "code": "CKS",
+    "issuer": "The Linux Foundation",
+    "badge": "Certified Kubernetes Security Specialist",
+    "url": "https://www.credly.com/badges/a4f3981f-1c2f-43c9-bd4c-501a5ff0e6f7",
+    "from": "2025-12-18",
+    "until": "2027-12-17",
+    "badge_img": "https://images.credly.com/images/9945dfcb-1cca-4529-85e6-db1be3782210/kubernetes-security-specialist-logo2.png",
+    "skills": ["Kubernetes", "Security", "RBAC", "Compliance"]
+  },
+  {
+    "code": "CNPA",
+    "issuer": "The Linux Foundation",
+    "badge": "Certified Cloud Native Platform Engineering Associate",
+    "url": "https://www.credly.com/badges/b2eb1d58-538b-424d-ba52-766c74d5d3bc",
+    "from": "2025-12-21",
+    "until": "2027-12-20",
+    "badge_img": "https://images.credly.com/images/bf3fc97e-a12c-4567-86ea-01639b9b15fb/blob",
+    "skills": ["Cloud Native", "Linux", "Containers"]
+  },
+  {
+    "code": "ICA",
+    "issuer": "The Linux Foundation",
+    "badge": "Istio Certified Associate",
+    "url": "https://www.credly.com/badges/346c040d-d84b-47ca-b372-d66d31c0e65c",
+    "from": "2025-12-12",
+    "until": "2027-12-11",
+    "badge_img": "https://images.credly.com/images/d7d4ddc8-7df8-4c03-9343-507b51e0ef99/image.png",
+    "skills": ["Istio", "Service Mesh", "Cloud"]
+  },
+  {
+    "code": "KCA",
+    "issuer": "The Linux Foundation",
+    "badge": "Kyverno Certified Associate",
+    "url": "https://www.credly.com/badges/e463616d-53e8-4147-80c5-6e2cda4e7325",
+    "from": "2025-12-23",
+    "until": "2027-12-22",
+    "badge_img": "https://images.credly.com/images/2592935a-d8fa-405d-b40a-711a75454fc2/image.png",
+    "skills": ["Kyverno", "Policy", "Kubernetes"]
+  },
+  {
+    "code": "KCSA",
+    "issuer": "The Linux Foundation",
+    "badge": "Kubernetes and Cloud Native Security Associate",
+    "url": "https://www.credly.com/badges/43c12126-bd66-4b92-b3f0-3fad85655864",
+    "from": "2025-12-13",
+    "until": "2026-12-12",
+    "badge_img": "https://images.credly.com/images/67dd8a95-8876-4051-9cb9-3d97c204f85a/image.png",
+    "skills": ["Kubernetes", "Security", "Cloud"]
+  },
+  {
+    "code": "KCNA",
+    "issuer": "The Linux Foundation",
+    "badge": "Kubernetes and Cloud Native Associate",
+    "url": "https://www.credly.com/badges/f90be3de-4999-4040-a69b-a6e3fec14023",
+    "from": "2025-12-11",
+    "until": "2027-12-10",
+    "badge_img": "https://images.credly.com/images/f28f1d88-428a-47f6-95b5-7da1dd6c1000/KCNA_badge.png",
+    "skills": ["Kubernetes", "Cloud Native", "Containers"]
+  },
+  {
+    "code": "OTCA",
+    "issuer": "The Linux Foundation",
+    "badge": "OpenTelemetry Certified Associate",
+    "url": "https://www.credly.com/badges/06f2074b-125a-4b8b-ade9-6f5eb187e917",
+    "from": "2025-12-25",
+    "until": "2027-12-24",
+    "badge_img": "https://images.credly.com/images/3d3f7131-83a4-4427-8a68-150ca90bcc23/blob",
+    "skills": ["OpenTelemetry", "Monitoring", "Tracing"]
+  },
+  {
+    "code": "Golden Kubestronaut",
+    "issuer": "The Linux Foundation",
+    "badge": "Golden Kubestronaut",
+    "url": "https://www.credly.com/badges/b71e3c76-aeee-4efb-b555-71d8a2024ede",
+    "from": "2026-03-02",
+    "badge_img": "https://images.credly.com/images/1dba0197-1013-4f23-8918-9479f77172d6/blob",
+    "skills": ["Gamification", "Kubernetes", "Community"]
+  },
+  {
+    "code": "Kubestronaut",
+    "issuer": "The Linux Foundation",
+    "badge": "Kubestronaut",
+    "url": "https://www.credly.com/badges/e71893e0-2356-46b9-97fe-a58db7bf7a26",
+    "from": "2026-02-27",
+    "badge_img": "https://images.credly.com/images/cd6c6449-6814-4613-a2d3-13cf4ac5be4f/image.png",
+    "skills": ["Kubernetes", "Community"]
+  },
+  {
+    "code": "PCA",
+    "issuer": "The Linux Foundation",
+    "badge": "Prometheus Certified Associate",
+    "url": "https://www.credly.com/badges/686be81d-5cba-47ad-93b0-98e85d0df29f",
+    "from": "2026-02-16",
+    "until": "2028-02-17",
+    "badge_img": "https://images.credly.com/images/c34436dc-1cfd-4125-a862-35f9c86ca17f/image.png",
+    "skills": ["Prometheus", "Monitoring", "Metrics"]
+  },
+  {
+    "code": "LFCS",
+    "issuer": "The Linux Foundation",
+    "badge": "LFCS: Linux Foundation Certified Systems Administrator",
+    "url": "https://www.credly.com/badges/3f5e3878-c238-4a66-a0b6-5fe2fffd0064",
+    "from": "2026-02-14",
+    "until": "2028-02-15",
+    "badge_img": "https://images.credly.com/images/1e6611ca-8afe-4ecc-ad4d-305fba52ee7e/1_LFCS-600x600.png",
+    "skills": ["Linux", "Administration", "Scripting"]
+  }
+]

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Job Titles verwalten</h1>
+
+<form id="add-jobtitle-form" method="POST" action="{{ url_for('jobtitles') }}">
+    <input type="text" name="name" placeholder="Job Title (EN)" required>
+    <input type="text" name="name_de" placeholder="Job Title (DE, optional)">
+    <button type="submit">Job Title hinzufügen</button>
+</form>
+
+<table>
+<tr><th>Name (EN)</th><th>Name (DE)</th><th>Aktion</th></tr>
+{% for j in jobtitles %}
+<tr>
+    <td><input type="text" value="{{ j.name }}" data-index="{{ loop.index0 }}" class="edit-jobtitle-en"></td>
+    <td><input type="text" value="{{ j.name_de }}" data-index="{{ loop.index0 }}" class="edit-jobtitle-de"></td>
+    <td>
+        <button type="button" onclick="deleteJobTitle({{ loop.index0 }})">Löschen</button>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<script>
+document.querySelectorAll('.edit-jobtitle-en, .edit-jobtitle-de').forEach(input => {
+    input.addEventListener('change', function() {
+        const index = this.dataset.index;
+        const en = document.querySelector(`.edit-jobtitle-en[data-index="${index}"]`).value;
+        const de = document.querySelector(`.edit-jobtitle-de[data-index="${index}"]`).value;
+
+        fetch("/jobtitles/edit", {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({index:index, name:en, name_de:de})
+        });
+    });
+});
+
+function deleteJobTitle(index) {
+    if(confirm('Job Title wirklich löschen?')) {
+        fetch("/jobtitles/delete", {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({index:index})
+        }).then(() => location.reload());
+    }
+}
+</script>
+{% endblock %}

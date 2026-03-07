@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Skills verwalten</h1>
+
+<form id="add-skill-form" method="POST" action="{{ url_for('skills') }}">
+    <input type="text" name="name" placeholder="Skill Name (EN)" required>
+    <input type="text" name="name_de" placeholder="Skill Name (DE, optional)">
+    <button type="submit">Skill hinzufügen</button>
+</form>
+
+<table>
+<tr><th>Skill (EN)</th><th>Skill (DE)</th><th>Aktion</th></tr>
+{% for s in skills %}
+<tr>
+    <td><input type="text" value="{{ s.name }}" data-index="{{ loop.index0 }}" class="edit-skill-en"></td>
+    <td><input type="text" value="{{ s.name_de }}" data-index="{{ loop.index0 }}" class="edit-skill-de"></td>
+    <td>
+        <button type="button" onclick="deleteSkill({{ loop.index0 }})">Löschen</button>
+    </td>
+</tr>
+{% endfor %}
+</table>
+
+<script>
+// In-place Edit
+document.querySelectorAll('.edit-skill-en, .edit-skill-de').forEach(input => {
+    input.addEventListener('change', function() {
+        const index = this.dataset.index;
+        const en = document.querySelector(`.edit-skill-en[data-index="${index}"]`).value;
+        const de = document.querySelector(`.edit-skill-de[data-index="${index}"]`).value;
+
+        fetch("/skills/edit", {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({index:index, name:en, name_de:de})
+        });
+    });
+});
+
+function deleteSkill(index) {
+    if(confirm('Skill wirklich löschen?')) {
+        fetch("/skills/delete", {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({index:index})
+        }).then(() => location.reload());
+    }
+}
+</script>
+{% endblock %}
