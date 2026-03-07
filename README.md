@@ -1,25 +1,25 @@
-# Project details
+# Project Details
+
 ## Pretext
-This project, is an experiment. I used ChatGPT to create a project, which allows me to structure my CV in a searchable format.
-I think this project is qualified as there is no exposure of the project to external sources. It's only spun up on a local docker container.
-As it is only used by me (or if you're brave enough by you), some errors can be accepted.
+This project is an experiment. I used ChatGPT to design a system that allows me to structure my CV in a searchable format.  
+It runs only in a local Docker container, with no exposure to external sources. Since it is intended for personal use (or for anyone curious enough to try it), minor errors are acceptable given the experimental nature.
 
-## Goal of this project
-The final result of this project can be seen on my [homepage](https://www.findichgut.net).
-This part is providing a WebUI to generate JSON files storing:
+## Goal of the Project
+The final result of this project can be seen on my [homepage](https://www.findichgut.net).  
+This component provides a WebUI to generate JSON files that store:
 
-- job titles (to have unique naming conventions)
-- skills (in English and if it differs German)
-- certifications, which are linked to skills
-- projects with a list of tasks in those projects, each task is linked again to skills
+- Job titles (to ensure consistent naming conventions)  
+- Skills (in English, and in German if they differ)  
+- Certifications, linked to relevant skills  
+- Projects with task lists, where each task is again linked to skills  
 
-Goal of the project is to allow to filter by skills and to provide an extract of my certifications and project tasks which are related to those skils.
-Further more it will be possible to create a full list of certifications and a full resumee.
+The goal is to enable filtering by skills and to provide extracts of certifications and project tasks related to those skills.  
+Additionally, it will be possible to generate a complete list of certifications and a full résumé.
 
-## How to run this
-Just clone this repository and run
+## How to Run
+Clone this repository and start the container with:
 ```bash
 docker compose up
-```
-## Take aways
-The take aways of this experient are published on my [website](www.findichgut.net)
+
+## Takeaways
+The takeaways from this experiment are published on my [blog post](https://www.findichgut.net).
