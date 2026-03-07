@@ -5,10 +5,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./data:/app/data   # Mount des Data-Verzeichnisses
-      - ./app.py:/app/app.py
-      - ./templates:/app/templates
-      - ./static:/app/static
+      - ${DATA_DIR:-./data}:/app/data:/app/data   # Mount des Data-Verzeichnisses
     environment:
       - FLASK_APP=app.py
-      - FLASK_ENV=development
+      - FLASK_ENV=production
