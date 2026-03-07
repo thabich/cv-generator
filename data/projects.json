@@ -1,0 +1,53 @@
+[
+  {
+    "title": "DevOps",
+    "title_de": "DevOps",
+    "jobtitle": "DevOps Engineer",
+    "from": "2026-02",
+    "until": "",
+    "tasks": [
+      {
+        "description": "Worked on a project",
+        "description_de": "An einem Projekt gearbeitet",
+        "skills": [
+          "Kubernetes"
+        ]
+      },
+      {
+        "description": "Did something else",
+        "description_de": "noch was",
+        "skills": [
+          "test"
+        ]
+      },
+      {
+        "description": "just to test without german",
+        "description_de": "just to test without german",
+        "skills": [
+          "test"
+        ]
+      }
+    ]
+  },
+  {
+    "title": "another project",
+    "title_de": "noch eins",
+    "jobtitle": "DevOps Engineer",
+    "from": "2026-11",
+    "until": "2026-01",
+    "tasks": [
+      {
+        "description": "some tasks",
+        "description_de": "einige aufgaben",
+        "skills": [
+          "Kubernetes"
+        ]
+      },
+      {
+        "description": "some other tasks without skills",
+        "description_de": "andere skillose aufgabe",
+        "skills": []
+      }
+    ]
+  }
+]
