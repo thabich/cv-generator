@@ -21,5 +21,12 @@ Clone this repository and start the container with:
 ```bash
 docker compose up
 
+# Set local path to data
+DATA_DIR=/my/local/data/dir docker compose up
+
+# Dev Mode
+docker-compose -f docker-compose.dev.yaml up
+```
+
 ## Takeaways
 The takeaways from this experiment are published on my [blog post](https://www.findichgut.net).

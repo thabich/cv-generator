@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, g
+from flask import Flask, render_template, request, redirect, url_for
 import os, json
 from threading import Timer
 
 app = Flask(__name__)
-DATA_DIR = "data"
+DATA_DIR = os.environ.get("DATA_DIR", "data")
 
 DATA_FILES = {
     "skills": os.path.join(DATA_DIR, "skills.json"),
