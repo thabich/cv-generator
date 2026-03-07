@@ -1,6 +1,6 @@
 # Project Details
 
-## Pretext
+## Introduction
 This project is an experiment. I used ChatGPT to design a system that allows me to structure my CV in a searchable format.  
 It runs only in a local Docker container, with no exposure to external sources. Since it is intended for personal use (or for anyone curious enough to try it), minor errors are acceptable given the experimental nature.
 
