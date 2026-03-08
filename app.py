@@ -1,6 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, send_file, redirect, url_for
 import os, json
-from threading import Timer
+from io import BytesIO
+from weasyprint import HTML
+from html4docx import HtmlToDocx
+from datetime import datetime
+from docx import Document
 
 app = Flask(__name__)
 DATA_DIR = os.environ.get("DATA_DIR", "data")
@@ -228,8 +232,8 @@ def delete_certificate():
     save_json(DATA_FILES["certificates"], certificates)
     return redirect("/certificates")
 
+@app.route("/generate_index", methods=["GET"])
 def generate_index():
-
     skills = load_json(DATA_FILES["skills"])
     projects = load_json(DATA_FILES["projects"])
     certificates = load_json(DATA_FILES["certificates"])
@@ -237,34 +241,95 @@ def generate_index():
     index = {}
 
     for skill in skills:
-
         name = skill["name"]
 
         index[name] = {
-            "tasks": [],
+            "projects": [],
             "certificates": []
         }
 
-        # Projekte / Tasks scannen
+        # --- Projekte / Tasks scannen ---
         for p_i, project in enumerate(projects):
+            task_indices = []
 
             for t_i, task in enumerate(project.get("tasks", [])):
-
                 if name in task.get("skills", []):
-                    index[name]["tasks"].append({
-                        "project": p_i,
-                        "task": t_i
-                    })
+                    task_indices.append(t_i)
 
-        # Zertifikate scannen
-        for c_i, cert in enumerate(certificates):
+            if task_indices:
+                index[name]["projects"].append({
+                    "id": p_i,
+                    "tasks": task_indices
+                })
 
-            if name in cert.get("skills", []):
-                index[name]["certificates"].append(c_i)
+        # --- Zertifikate scannen ---
+        cert_indices = [c_i for c_i, cert in enumerate(certificates) if name in cert.get("skills", [])]
+        index[name]["certificates"] = cert_indices
 
     save_json(DATA_FILES["index"], index, False)
+    return "OK"
 
-# 5 Minuten Intervall
+@app.route("/export", methods=["GET", "POST"])
+def export():
+    skills = load_json(DATA_FILES["skills"])
+    projects = load_json(DATA_FILES["projects"])
+    certificates = load_json(DATA_FILES["certificates"])
+
+    if request.method == "POST":
+        selected_skills = request.form.getlist("skills")
+
+        # --- Projekte filtern (antichronologisch) ---
+        filtered_projects = []
+        for proj in projects:
+            if any(skill in task.get("skills", []) for task in proj.get("tasks", []) for skill in selected_skills):
+                filtered_projects.append(proj)
+        filtered_projects.sort(key=lambda p: p.get("from",""), reverse=True)
+
+        # --- Zertifikate filtern ---
+        filtered_certificates = [cert for cert in certificates if any(skill in cert.get("skills", []) for skill in selected_skills)]
+
+        # --- HTML rendern ---
+        rendered_html = render_template(
+            "export_template.html",
+            projects=filtered_projects,
+            certificates=filtered_certificates,
+            skills=skills,
+            selected_skills=selected_skills
+        )
+
+        with open("/tmp/rendered.html", "w", encoding="utf-8") as f:
+          f.write(rendered_html)
+        # --- Exporttyp ---
+        export_type = request.form.get("export_type", "pdf")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+
+        if export_type == "pdf":
+            pdf_bytes = BytesIO()
+            HTML(string=rendered_html).write_pdf(pdf_bytes)
+            pdf_bytes.seek(0)
+            return send_file(
+                pdf_bytes,
+                as_attachment=True,
+                download_name=f"skills_export_{timestamp}.pdf",
+                mimetype="application/pdf"
+            )
+        elif export_type == "docx":
+            parser = HtmlToDocx()
+            docx_bytes = BytesIO()
+            document = Document()
+            parser.add_html_to_document(rendered_html, document)
+            parser.save(docx_bytes)
+            docx_bytes.seek(0)
+            return send_file(
+                docx_bytes,
+                as_attachment=True,
+                download_name=f"skills_export_{timestamp}.docx",
+                mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            )
+
+    # GET: Formular anzeigen
+    return render_template("export_form.html", skills=skills)
+
 # --- Start App ---
 if __name__ == "__main__":
     schedule_index()

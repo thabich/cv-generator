@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Skills Export</h2>
+<form method="POST">
+  <label>Skills auswählen:</label><br>
+  {% for skill in skills %}
+    <input type="checkbox" name="skills" value="{{ skill.name }}"> {{ skill.name }}<br>
+  {% endfor %}
+  <br>
+  <button type="submit" name="export_type" value="pdf">PDF exportieren</button>
+  <button type="submit" name="export_type" value="docx">DOCX exportieren</button>
+</form>
+{% endblock %}
