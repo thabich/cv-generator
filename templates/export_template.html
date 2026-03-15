@@ -1,110 +1,49 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Skills Export</title>
+<meta charset="UTF-8">
+<title>Skills Export</title>
 <style>
-@page {
-  size: A4;
-  margin: 2cm;
-
-  @top-center {
-    content: "Skill Export – FindIchGut GmbH";
-    font-weight: bold;
-    font-size: 10pt;
-    color: #004080;
-  }
-
-  @bottom-center {
-    content: "Seite " counter(page) " von " counter(pages);
-    font-size: 9pt;
-    color: #666;
-  }
-}
-
-  body {
-    font-family: "Arial", sans-serif;
-    font-size: 12pt;
-    margin: 2cm;
-    color: #333;
-  }
-
-  h1, h2, h3 {
-    color: #004080; /* Standard Blau für Überschriften */
-    margin-bottom: 0.5em;
-  }
-
-  h1 {
-    border-bottom: 2px solid #004080;
-    padding-bottom: 0.3em;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1.5em;
-  }
-
-  th, td {
-    border: 1px solid #aaa;
-    padding: 6px 8px;
-  }
-
-  th {
-    background-color: #f0f8ff; /* leichtes Blau für Kopfzeile */
-  }
-
-  ul {
-    margin: 0;
-    padding-left: 1.2em;
-  }
-
-  .skill-header {
-    color: #006600; /* Grün für Skillüberschriften */
-    margin-top: 2em;
-    margin-bottom: 0.5em;
-  }
-
+body { font-family: Arial, sans-serif; color:#333; margin:2cm; }
+h1,h2,h3 { color:#004080; margin-bottom:0.5em; }
+h1 { border-bottom:2px solid #004080; padding-bottom:0.3em; }
+table { width:100%; border-collapse:collapse; margin-bottom:1.5em; }
+th,td { border:1px solid #aaa; padding:6px 8px; }
+th { background:#f0f8ff; }
+ul { margin:0; padding-left:1.2em; }
+.skill-header { color:#006600; margin-top:2em; margin-bottom:0.5em; }
 </style>
 </head>
 <body>
-  <h1>Skills Export</h1>
+<h1>Skills Export</h1>
 
-  {% if projects|length > 0 -%}
-  <h2>Projekte</h2>
-  {% for proj in projects -%}
-    <h3>{{ proj.title_de or proj.title }} ({{ proj.jobtitle }})</h3>
-    <ul>
-      {% for task in proj.tasks -%}
-        {% if task.skills|select("in", selected_skills)|list %}
-          <li>{{ task.description_de or task.description }}</li>
-        {% endif -%}
-      {% endfor -%}
-    </ul>
-  {% endfor -%}
-  {% endif -%}
-  {% if certificates|length > 0 %}
-  <h2>Zertifikate</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Code</th>
-        <th>Badge</th>
-        <th>Issuer</th>
-        <th>Link</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for cert in certificates -%}
-        <tr>
-          <td>{{ cert.code }}</td>
-          <td>{{ cert.badge }}</td>
-          <td>{{ cert.issuer }}</td>
-          <td><a href="{{ cert.url }}" target="_blank">{{ cert.badge }}</a></td>
-        </tr>
-      {% endfor -%}
-    </tbody>
-  </table>
-  {% endif -%}
+{% if projects %}
+<h2>Projekte</h2>
+{% for proj in projects %}
+<h3>{{ proj.title_de or proj.title }} ({{ proj.jobtitle }})</h3>
+<ul>
+{% for task in proj.tasks %}
+{% if task.skills|select("in", selected_skills)|list %}
+<li>{{ task.description_de or task.description }}</li>
+{% endif %}
+{% endfor %}
+</ul>
+{% endfor %}
+{% endif %}
+
+{% if certificates %}
+<h2>Zertifikate</h2>
+<table>
+<tr><th>Code</th><th>Badge</th><th>Issuer</th><th>Link</th></tr>
+{% for cert in certificates %}
+<tr>
+<td>{{ cert.code }}</td>
+<td>{{ cert.badge }}</td>
+<td>{{ cert.issuer }}</td>
+<td><a href="{{ cert.url }}">{{ cert.badge }}</a></td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}
 </body>
 </html>

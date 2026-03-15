@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Kategorien verwalten</h2>
+
+<form method="POST" style="margin-bottom:20px;">
+  <input type="text" name="name" placeholder="Category name (EN)" required>
+  <input type="text" name="name_de" placeholder="Kategorie Name (DE)" required>
+  <input type="color" name="color" value="#0d6efd">
+  <button type="submit">Hinzufügen</button>
+</form>
+
+<table border="1" cellpadding="5">
+<tr>
+  <th>Name (EN)</th>
+  <th>Name (DE)</th>
+  <th>Farbe</th>
+  <th>Aktion</th>
+</tr>
+
+{% for cat in categories %}
+
+<tr>
+  <td>{{ cat.name }}</td>
+  <td>{{ cat.name_de }}</td>
+  <td>
+    <span style="
+      display:inline-block;
+      width:20px;
+      height:20px;
+      background:{{ cat.color }};
+      border:1px solid #ccc;
+      border-radius:4px;">
+    </span>
+    {{ cat.color }}
+  </td>
+  <td>
+    <button onclick="deleteCategory({{ loop.index0 }})">Löschen</button>
+  </td>
+</tr>
+{% endfor %}
+
+</table>
+
+<script>
+function deleteCategory(index){
+  if(confirm('Kategorie löschen?')){
+    fetch("/categories/delete",{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({index:index})
+    }).then(()=>location.reload());
+  }
+}
+</script>
+
+{% endblock %}
+

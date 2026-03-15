@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, send_file, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import os, json
 from io import BytesIO
+from datetime import datetime
 from weasyprint import HTML
 from html4docx import HtmlToDocx
-from datetime import datetime
 from docx import Document
 
 app = Flask(__name__)
@@ -11,10 +11,11 @@ DATA_DIR = os.environ.get("DATA_DIR", "data")
 
 DATA_FILES = {
     "skills": os.path.join(DATA_DIR, "skills.json"),
+    "categories": os.path.join(DATA_DIR, "categories.json"),
     "jobtitles": os.path.join(DATA_DIR, "jobtitles.json"),
     "projects": os.path.join(DATA_DIR, "projects.json"),
     "certificates": os.path.join(DATA_DIR, "certificates.json"),
-    "index":  os.path.join(DATA_DIR, "index.json")
+    "index": os.path.join(DATA_DIR, "index.json")
 }
 
 # --- Helferfunktionen ---
@@ -34,12 +35,31 @@ def save_json(path, data, generate_index_flag=True):
     if generate_index_flag:
         generate_index()
 
-# --- JSON-Dateien initialisieren ---
+def generate_index():
+    skills = load_json(DATA_FILES["skills"])
+    projects = load_json(DATA_FILES["projects"])
+    certificates = load_json(DATA_FILES["certificates"])
+    index = {}
+    for skill in skills:
+        name = skill["name"]
+        index[name] = {"projects": [], "certificates": []}
+        for p_i, project in enumerate(projects):
+            task_indices = []
+            for t_i, task in enumerate(project.get("tasks", [])):
+                if name in task.get("skills", []):
+                    task_indices.append(t_i)
+            if task_indices:
+                index[name]["projects"].append({"id": p_i, "tasks": task_indices})
+        cert_indices = [c_i for c_i, cert in enumerate(certificates) if name in cert.get("skills", [])]
+        index[name]["certificates"] = cert_indices
+    save_json(DATA_FILES["index"], index, False)
+
+# --- JSON Dateien sicherstellen ---
 os.makedirs(DATA_DIR, exist_ok=True)
 for file_path in DATA_FILES.values():
     ensure_json(file_path)
 
-# --- Routes ---
+# --- Routen ---
 @app.route("/")
 def home():
     skills = load_json(DATA_FILES["skills"])
@@ -47,31 +67,31 @@ def home():
     certificates = load_json(DATA_FILES["certificates"])
     return render_template("home.html", skills=skills, projects=projects, certificates=certificates)
 
-# Skills anzeigen / hinzufügen
-@app.route("/skills", methods=["GET", "POST"])
-def skills():
+# --- Skills ---
+@app.route("/skills", methods=["GET","POST"])
+def skills_view():
     skills = load_json(DATA_FILES["skills"])
+    categories = load_json(DATA_FILES["categories"])
     if request.method == "POST":
-        # Neues Skill hinzufügen
         name = request.form.get("name")
         name_de = request.form.get("name_de") or ""
-        skills.append({"name": name, "name_de": name_de})
+        category = request.form.get("category") or ""
+        skills.append({"name": name, "name_de": name_de, "category": category})
         save_json(DATA_FILES["skills"], skills)
-        return redirect(url_for("skills"))
-    return render_template("skills.html", skills=skills)
+        return redirect(url_for("skills_view"))
+    return render_template("skills.html", skills=skills, categories=categories)
 
-# Skill bearbeiten (in-place)
 @app.route("/skills/edit", methods=["POST"])
 def edit_skill():
     data = request.get_json()
     index = int(data["index"])
     skills = load_json(DATA_FILES["skills"])
     skills[index]["name"] = data["name"]
-    skills[index]["name_de"] = data.get("name_de", "")
+    skills[index]["name_de"] = data.get("name_de","")
+    skills[index]["category"] = data.get("category","")
     save_json(DATA_FILES["skills"], skills)
     return '', 204
 
-# Skill löschen
 @app.route("/skills/delete", methods=["POST"])
 def delete_skill():
     data = request.get_json()
@@ -81,31 +101,62 @@ def delete_skill():
     save_json(DATA_FILES["skills"], skills)
     return '', 204
 
-# Job Titles anzeigen / hinzufügen
-@app.route("/jobtitles", methods=["GET", "POST"])
-def jobtitles():
+# --- Categories ---
+@app.route("/categories", methods=["GET","POST"])
+def categories_view():
+    categories = load_json(DATA_FILES["categories"])
+
+    if request.method == "POST":
+        name = request.form.get("name")
+        name_de = request.form.get("name_de")
+        color = request.form.get("color")
+
+        categories.append({
+            "name": name,
+            "name_de": name_de,
+            "color": color
+        })
+
+        save_json(DATA_FILES["categories"], categories)
+        return redirect(url_for("categories_view"))
+
+    return render_template("categories.html", categories=categories)
+
+
+@app.route("/categories/delete", methods=["POST"])
+def delete_category():
+    data = request.get_json()
+    index = int(data["index"])
+
+    categories = load_json(DATA_FILES["categories"])
+    categories.pop(index)
+
+    save_json(DATA_FILES["categories"], categories)
+
+    return '', 204
+
+# --- Job Titles ---
+@app.route("/jobtitles", methods=["GET","POST"])
+def jobtitles_view():
     jobtitles = load_json(DATA_FILES["jobtitles"])
     if request.method == "POST":
-        # Neues Job Title hinzufügen
         name = request.form.get("name")
         name_de = request.form.get("name_de") or ""
         jobtitles.append({"name": name, "name_de": name_de})
         save_json(DATA_FILES["jobtitles"], jobtitles)
-        return redirect(url_for("jobtitles"))
+        return redirect(url_for("jobtitles_view"))
     return render_template("jobtitles.html", jobtitles=jobtitles)
 
-# Job Title bearbeiten (in-place)
 @app.route("/jobtitles/edit", methods=["POST"])
 def edit_jobtitle():
     data = request.get_json()
     index = int(data["index"])
     jobtitles = load_json(DATA_FILES["jobtitles"])
     jobtitles[index]["name"] = data["name"]
-    jobtitles[index]["name_de"] = data.get("name_de", "")
+    jobtitles[index]["name_de"] = data.get("name_de","")
     save_json(DATA_FILES["jobtitles"], jobtitles)
     return '', 204
 
-# Job Title löschen
 @app.route("/jobtitles/delete", methods=["POST"])
 def delete_jobtitle():
     data = request.get_json()
@@ -115,13 +166,12 @@ def delete_jobtitle():
     save_json(DATA_FILES["jobtitles"], jobtitles)
     return '', 204
 
-# Projekte anzeigen / hinzufügen
-@app.route("/projects", methods=["GET", "POST"])
-def projects():
+# --- Projects ---
+@app.route("/projects", methods=["GET","POST"])
+def projects_view():
     projects = load_json(DATA_FILES["projects"])
-    jobtitles = load_json(DATA_FILES["jobtitles"])
     skills = load_json(DATA_FILES["skills"])
-
+    jobtitles = load_json(DATA_FILES["jobtitles"])
     if request.method == "POST":
         edit_index = request.form.get("edit_index")
         title = request.form.get("title")
@@ -129,37 +179,23 @@ def projects():
         jobtitle = request.form.get("jobtitle")
         from_date = request.form.get("from")
         until_date = request.form.get("until")
-
-        # Tasks dynamisch
         tasks = []
-        task_count = int(request.form.get("task_count", 0))
+        task_count = int(request.form.get("task_count",0))
         for i in range(task_count):
             desc = request.form.get(f"task_{i}_desc")
             desc_de = request.form.get(f"task_{i}_desc_de") or desc
             task_skills = request.form.getlist(f"task_{i}_skills")
             if desc:
                 tasks.append({"description": desc, "description_de": desc_de, "skills": task_skills})
-
-        project_data = {
-            "title": title,
-            "title_de": title_de,
-            "jobtitle": jobtitle,
-            "from": from_date,
-            "until": until_date,
-            "tasks": tasks
-        }
-
+        pdata = {"title":title,"title_de":title_de,"jobtitle":jobtitle,"from":from_date,"until":until_date,"tasks":tasks}
         if edit_index != "":
-            projects[int(edit_index)] = project_data
+            projects[int(edit_index)] = pdata
         else:
-            projects.append(project_data)
-
+            projects.append(pdata)
         save_json(DATA_FILES["projects"], projects)
-        return redirect(url_for("projects"))
+        return redirect(url_for("projects_view"))
+    return render_template("projects.html", projects=projects, skills=skills, jobtitles=jobtitles)
 
-    return render_template("projects.html", projects=projects, jobtitles=jobtitles, skills=skills)
-
-# Projekt löschen
 @app.route("/projects/delete", methods=["POST"])
 def delete_project():
     data = request.get_json()
@@ -169,18 +205,15 @@ def delete_project():
     save_json(DATA_FILES["projects"], projects)
     return '', 204
 
-# Übersicht + Add
-@app.route("/certificates", methods=["GET", "POST"])
+# --- Certificates ---
+@app.route("/certificates", methods=["GET","POST"])
 def certificates_view():
     certificates = load_json(DATA_FILES["certificates"])
     skills = [s["name"] for s in load_json(DATA_FILES["skills"])]
-
     if request.method == "POST":
         code = request.form.get("code")
-        if any(c["code"] == code for c in certificates):
-            flash("Zertifikat mit diesem Code existiert bereits.")
-            return redirect("/certificates")
-
+        if any(c["code"]==code for c in certificates):
+            return redirect(url_for("certificates_view"))
         new_cert = {
             "code": code,
             "issuer": request.form.get("issuer"),
@@ -193,22 +226,17 @@ def certificates_view():
         }
         certificates.append(new_cert)
         save_json(DATA_FILES["certificates"], certificates)
-        return redirect("/certificates")
-
+        return redirect(url_for("certificates_view"))
     return render_template("certificates.html", certificates=certificates, skills=skills)
 
-# Edit
 @app.route("/certificates/edit", methods=["POST"])
 def edit_certificate():
     certificates = load_json(DATA_FILES["certificates"])
     skills = [s["name"] for s in load_json(DATA_FILES["skills"])]
     code = request.form.get("code")
-    cert = next((c for c in certificates if c["code"] == code), None)
+    cert = next((c for c in certificates if c["code"]==code),None)
     if not cert:
-        flash("Zertifikat nicht gefunden")
-        return redirect("/certificates")
-
-    # Editieren, wenn POST neue Daten gesendet hat
+        return redirect(url_for("certificates_view"))
     if "issuer" in request.form:
         cert["issuer"] = request.form.get("issuer")
         cert["badge"] = request.form.get("badge")
@@ -218,119 +246,48 @@ def edit_certificate():
         cert["until"] = request.form.get("until")
         cert["skills"] = request.form.getlist("skills")
         save_json(DATA_FILES["certificates"], certificates)
-        return redirect("/certificates")
-
-    # GET nicht nötig, Formular wird über POST aufgerufen
+        return redirect(url_for("certificates_view"))
     return render_template("certificates.html", certificates=certificates, skills=skills, edit_cert=cert)
 
-# Delete
 @app.route("/certificates/delete", methods=["POST"])
 def delete_certificate():
     certificates = load_json(DATA_FILES["certificates"])
     code = request.form.get("code")
     certificates = [c for c in certificates if c["code"] != code]
     save_json(DATA_FILES["certificates"], certificates)
-    return redirect("/certificates")
+    return redirect(url_for("certificates_view"))
 
-@app.route("/generate_index", methods=["GET"])
-def generate_index():
+# --- Export ---
+@app.route("/export", methods=["GET","POST"])
+def export_view():
     skills = load_json(DATA_FILES["skills"])
     projects = load_json(DATA_FILES["projects"])
     certificates = load_json(DATA_FILES["certificates"])
-
-    index = {}
-
-    for skill in skills:
-        name = skill["name"]
-
-        index[name] = {
-            "projects": [],
-            "certificates": []
-        }
-
-        # --- Projekte / Tasks scannen ---
-        for p_i, project in enumerate(projects):
-            task_indices = []
-
-            for t_i, task in enumerate(project.get("tasks", [])):
-                if name in task.get("skills", []):
-                    task_indices.append(t_i)
-
-            if task_indices:
-                index[name]["projects"].append({
-                    "id": p_i,
-                    "tasks": task_indices
-                })
-
-        # --- Zertifikate scannen ---
-        cert_indices = [c_i for c_i, cert in enumerate(certificates) if name in cert.get("skills", [])]
-        index[name]["certificates"] = cert_indices
-
-    save_json(DATA_FILES["index"], index, False)
-    return "OK"
-
-@app.route("/export", methods=["GET", "POST"])
-def export():
-    skills = load_json(DATA_FILES["skills"])
-    projects = load_json(DATA_FILES["projects"])
-    certificates = load_json(DATA_FILES["certificates"])
-
-    if request.method == "POST":
+    if request.method=="POST":
         selected_skills = request.form.getlist("skills")
-
-        # --- Projekte filtern (antichronologisch) ---
         filtered_projects = []
         for proj in projects:
-            if any(skill in task.get("skills", []) for task in proj.get("tasks", []) for skill in selected_skills):
+            if any(skill in task.get("skills",[]) for task in proj.get("tasks",[]) for skill in selected_skills):
                 filtered_projects.append(proj)
-        filtered_projects.sort(key=lambda p: p.get("from",""), reverse=True)
-
-        # --- Zertifikate filtern ---
-        filtered_certificates = [cert for cert in certificates if any(skill in cert.get("skills", []) for skill in selected_skills)]
-
-        # --- HTML rendern ---
-        rendered_html = render_template(
-            "export_template.html",
-            projects=filtered_projects,
-            certificates=filtered_certificates,
-            skills=skills,
-            selected_skills=selected_skills
-        )
-
-        with open("/tmp/rendered.html", "w", encoding="utf-8") as f:
-          f.write(rendered_html)
-        # --- Exporttyp ---
-        export_type = request.form.get("export_type", "pdf")
+        filtered_projects.sort(key=lambda p:p.get("from",""), reverse=True)
+        filtered_certificates = [c for c in certificates if any(skill in c.get("skills",[]) for skill in selected_skills)]
+        rendered_html = render_template("export_template.html", projects=filtered_projects, certificates=filtered_certificates, skills=skills, selected_skills=selected_skills)
+        export_type = request.form.get("export_type","pdf")
         timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-
-        if export_type == "pdf":
+        if export_type=="pdf":
             pdf_bytes = BytesIO()
             HTML(string=rendered_html).write_pdf(pdf_bytes)
             pdf_bytes.seek(0)
-            return send_file(
-                pdf_bytes,
-                as_attachment=True,
-                download_name=f"skills_export_{timestamp}.pdf",
-                mimetype="application/pdf"
-            )
-        elif export_type == "docx":
+            return send_file(pdf_bytes, as_attachment=True, download_name=f"skills_export_{timestamp}.pdf", mimetype="application/pdf")
+        elif export_type=="docx":
             parser = HtmlToDocx()
             docx_bytes = BytesIO()
             document = Document()
             parser.add_html_to_document(rendered_html, document)
             parser.save(docx_bytes)
             docx_bytes.seek(0)
-            return send_file(
-                docx_bytes,
-                as_attachment=True,
-                download_name=f"skills_export_{timestamp}.docx",
-                mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            )
-
-    # GET: Formular anzeigen
+            return send_file(docx_bytes, as_attachment=True, download_name=f"skills_export_{timestamp}.docx", mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
     return render_template("export_form.html", skills=skills)
 
-# --- Start App ---
-if __name__ == "__main__":
-    schedule_index()
+if __name__=="__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
