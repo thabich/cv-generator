@@ -1,32 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
-<title>CV Builder</title>
-
-<link rel="stylesheet" href="/static/css/style.css">
-
+  <meta charset="UTF-8">
+  <title>CV Builder</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  <style>
+    textarea { width: 100%; min-height: 80px; margin-bottom: 0.5rem; }
+    input[type=text], input[type=month], input[type=date], select { width: 100%; padding: 0.3rem; margin-bottom: 0.5rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { border: 1px solid #ccc; padding: 0.5rem; }
+    th { background: #f0f0f0; }
+    .skill-badge { background: #cce5ff; padding: 2px 5px; margin: 2px; display: inline-block; border-radius: 3px; }
+    .task-block { border: 1px solid #ccc; padding: 0.5rem; margin-bottom: 0.5rem; }
+    .container { max-width: 1200px; margin: auto; padding: 1rem; }
+  </style>
 </head>
-
 <body>
-
-<div class="container">
-
-<h1>CV Builder</h1>
-
-<nav>
-<a href="/">Dashboard</a> |
-<a href="/skills">Skills</a> |
-<a href="/jobtitles">Job Titles</a> |
-<a href="/projects">Projects</a> |
-<a href="/certificates">Certificates</a> |
-<a href="/generate_index">Generate Index</a>
-</nav>
-
-<hr>
-
-{% block content %}{% endblock %}
-
-</div>
-
+  <div class="container">
+    <h1>CV Builder</h1>
+    <nav>
+      <a href="{{ url_for('home') }}">Dashboard</a> |
+      <a href="{{ url_for('skills_view') }}">Skills</a> |
+      <a href="{{ url_for('categories_view') }}">Kategorien</a> |
+      <a href="{{ url_for('jobtitles_view') }}">Job Titles</a> |
+      <a href="{{ url_for('projects_view') }}">Projekte</a> |
+      <a href="{{ url_for('certificates_view') }}">Zertifikate</a> |
+      <a href="{{ url_for('export_view') }}">Export</a>
+    </nav>
+    <hr>
+    {% block content %}{% endblock %}
+  </div>
 </body>
 </html>

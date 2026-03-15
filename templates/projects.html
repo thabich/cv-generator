@@ -1,118 +1,119 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Projekte verwalten</h1>
+<h2>Projekte verwalten</h2>
 
-<form method="POST" id="project-form" action="{{ url_for('projects') }}">
-    <input type="hidden" name="edit_index" id="edit_index" value="">
-    <label>Titel (EN): <input type="text" name="title" id="project_title" required></label>
-    <label>Titel (DE, optional): <input type="text" name="title_de" id="project_title_de"></label>
-    <label>Jobtitle:
-        <select name="jobtitle" id="project_jobtitle" required>
-        {% for j in jobtitles %}
-            <option value="{{ j.name }}">{{ j.name }}{% if j.name_de %} / {{ j.name_de }}{% endif %}</option>
-        {% endfor %}
-        </select>
-    </label>
-    <label>Von: <input type="month" name="from" id="project_from" required></label>
-    <label>Bis: <input type="month" name="until" id="project_until"></label>
+<form method="POST" id="project-form">
+  <input type="hidden" name="edit_index" id="edit_index" value="">
 
-    <h3>Tasks</h3>
-    <div id="tasks-container"></div>
+  <label>Titel (EN):
+    <input type="text" name="title" id="project_title" required>
+  </label>
+  <label>Titel (DE, optional):
+    <input type="text" name="title_de" id="project_title_de">
+  </label>
+  <label>Job Title:
+    <select name="jobtitle" id="project_jobtitle" required>
+      {% for jt in jobtitles %}
+        <option value="{{ jt.name }}">{{ jt.name }}{% if jt.name_de %} / {{ jt.name_de }}{% endif %}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Von:
+    <input type="month" name="from" id="project_from" required>
+  </label>
+  <label>Bis:
+    <input type="month" name="until" id="project_until">
+  </label>
 
-    <input type="hidden" name="task_count" id="task_count" value="0">
-    <button type="button" id="add-task-btn">Task hinzufügen</button>
-    <br><br>
-    <button type="submit">Projekt speichern</button>
+  <h3>Tasks</h3>
+  <div id="tasks-container"></div>
+  <input type="hidden" name="task_count" id="task_count" value="0">
+  <button type="button" id="add-task-btn">Task hinzufügen</button>
+  <br><br>
+  <button type="submit">Projekt speichern</button>
 </form>
 
-<h2>Vorhandene Projekte</h2>
+<h3>Vorhandene Projekte</h3>
 <table>
-<tr><th>Titel (EN)</th><th>Titel (DE)</th><th>Jobtitle</th><th>Von</th><th>Bis</th><th>Aktion</th></tr>
+<tr><th>Titel (EN)</th><th>Titel (DE)</th><th>Job Title</th><th>Von</th><th>Bis</th><th>Aktion</th></tr>
 {% for p in projects %}
 <tr>
-    <td>{{ p.title }}</td>
-    <td>{{ p.title_de }}</td>
-    <td>{{ p.jobtitle }}</td>
-    <td>{{ p.from }}</td>
-    <td>{{ p.until }}</td>
-    <td>
-        <button type="button" onclick="editProject({{ loop.index0 }})">Bearbeiten</button>
-        <button type="button" onclick="deleteProject({{ loop.index0 }})">Löschen</button>
-    </td>
+  <td>{{ p.title }}</td>
+  <td>{{ p.title_de }}</td>
+  <td>{{ p.jobtitle }}</td>
+  <td>{{ p.from }}</td>
+  <td>{{ p.until }}</td>
+  <td>
+    <button type="button" onclick="editProject({{ loop.index0 }})">Bearbeiten</button>
+    <button type="button" onclick="deleteProject({{ loop.index0 }})">Löschen</button>
+  </td>
 </tr>
 {% endfor %}
 </table>
 
 <script>
-const skills = [{% for s in skills %}"{{ s.name }}",{% endfor %}];
-
+const allSkills = [{% for s in skills %}"{{ s.name }}",{% endfor %}];
 let taskIndex = 0;
 
-function createTaskFields(index, desc='', desc_de='', selected_skills=[]) {
-    const container = document.getElementById("tasks-container");
-    const div = document.createElement("div");
-    div.className = "task-block";
-    div.style.border = "1px solid #ccc";
-    div.style.margin = "0.5rem 0";
-    div.style.padding = "0.5rem";
-    div.innerHTML = `
-        <label>Task Beschreibung (EN): <textarea name="task_${index}_desc" required>${desc}</textarea></label>
-        <label>Task Beschreibung (DE, optional): <textarea name="task_${index}_desc_de">${desc_de}</textarea></label>
-        <label>Skills auswählen:
-            <select name="task_${index}_skills" multiple>
-                ${skills.map(s => `<option value="${s}" ${selected_skills.includes(s) ? 'selected' : ''}>${s}</option>`).join('')}
-            </select>
-        </label>
-        <button type="button" onclick="removeTask(this)">Entfernen</button>
-    `;
-    container.appendChild(div);
-    document.getElementById("task_count").value = taskIndex + 1;
+function createTaskFields(index, desc='', desc_de='', selected_skills=[]){
+  const container = document.getElementById("tasks-container");
+  const div = document.createElement("div");
+  div.className="task-block";
+  div.innerHTML = `
+    <label>Task Beschreibung (EN):
+      <textarea name="task_${index}_desc" required>${desc}</textarea>
+    </label>
+    <label>Task Beschreibung (DE, optional):
+      <textarea name="task_${index}_desc_de">${desc_de}</textarea>
+    </label>
+    <label>Skills auswählen:
+      <select name="task_${index}_skills" id="task_${index}_skills" multiple>
+        ${allSkills.map(s=>`<option value="${s}" ${selected_skills.includes(s)?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </label>
+    <button type="button" onclick="removeTask(this)">Entfernen</button>
+  `;
+  container.appendChild(div);
+
+  new Choices(`#task_${index}_skills`, { removeItemButton: true });
+  document.getElementById("task_count").value = container.querySelectorAll(".task-block").length;
 }
 
-function removeTask(button) {
-    button.parentElement.remove();
-    const container = document.getElementById("tasks-container");
-    const blocks = container.querySelectorAll(".task-block");
-    document.getElementById("task_count").value = blocks.length;
-    taskIndex = blocks.length;
+function removeTask(button){
+  button.parentElement.remove();
+  const container = document.getElementById("tasks-container");
+  document.getElementById("task_count").value = container.querySelectorAll(".task-block").length;
 }
 
-document.getElementById("add-task-btn").addEventListener("click", () => {
-    createTaskFields(taskIndex);
-    taskIndex++;
+document.getElementById("add-task-btn").addEventListener("click", ()=>{
+  createTaskFields(taskIndex);
+  taskIndex++;
 });
 
-// --- Edit Project ---
-function editProject(index) {
-    const project = {{ projects | tojson }};
-    const p = project[index];
+function editProject(index){
+  const projects = {{ projects|tojson }};
+  const p = projects[index];
+  document.getElementById("project_title").value = p.title;
+  document.getElementById("project_title_de").value = p.title_de;
+  document.getElementById("project_jobtitle").value = p.jobtitle;
+  document.getElementById("project_from").value = p.from;
+  document.getElementById("project_until").value = p.until;
+  document.getElementById("edit_index").value = index;
 
-    document.getElementById("project_title").value = p.title;
-    document.getElementById("project_title_de").value = p.title_de;
-    document.getElementById("project_jobtitle").value = p.jobtitle;
-    document.getElementById("project_from").value = p.from;
-    document.getElementById("project_until").value = p.until;
-    document.getElementById("edit_index").value = index;
-
-    const container = document.getElementById("tasks-container");
-    container.innerHTML = '';
-    taskIndex = 0;
-
-    p.tasks.forEach(t => {
-        createTaskFields(taskIndex, t.description, t.description_de, t.skills);
-        taskIndex++;
-    });
+  const container = document.getElementById("tasks-container");
+  container.innerHTML = '';
+  taskIndex=0;
+  p.tasks.forEach(t=>{
+    createTaskFields(taskIndex, t.description, t.description_de, t.skills);
+    taskIndex++;
+  });
 }
 
-// --- Delete Project ---
-function deleteProject(index) {
-    if(confirm('Projekt wirklich löschen?')) {
-        fetch("/projects/delete", {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({index:index})
-        }).then(() => location.reload());
-    }
+function deleteProject(index){
+  if(confirm('Projekt wirklich löschen?')){
+    fetch("/projects/delete",{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:index})})
+    .then(()=>location.reload());
+  }
 }
 </script>
 {% endblock %}
