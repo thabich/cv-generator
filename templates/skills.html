@@ -2,18 +2,37 @@
 {% block content %}
 <h1>Skills verwalten</h1>
 
-<form id="add-skill-form" method="POST" action="{{ url_for('skills') }}">
+<!-- Neues Skill hinzufügen -->
+<form id="add-skill-form" method="POST" action="{{ url_for('skills_view') }}">
     <input type="text" name="name" placeholder="Skill Name (EN)" required>
     <input type="text" name="name_de" placeholder="Skill Name (DE, optional)">
+    <label>Kategorie:
+        <select name="category">
+            <option value="">-- keine --</option>
+            {% for cat in categories %}
+            <option value="{{ cat.name }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
     <button type="submit">Skill hinzufügen</button>
 </form>
 
+<hr>
+
 <table>
-<tr><th>Skill (EN)</th><th>Skill (DE)</th><th>Aktion</th></tr>
+<tr><th>Skill (EN)</th><th>Skill (DE)</th><th>Kategorie</th><th>Aktion</th></tr>
 {% for s in skills %}
 <tr>
     <td><input type="text" value="{{ s.name }}" data-index="{{ loop.index0 }}" class="edit-skill-en"></td>
     <td><input type="text" value="{{ s.name_de }}" data-index="{{ loop.index0 }}" class="edit-skill-de"></td>
+    <td>
+        <select data-index="{{ loop.index0 }}" class="edit-skill-category">
+            <option value="">-- keine --</option>
+            {% for cat in categories %}
+            <option value="{{ cat.name }}" {% if s.category == cat.name %}selected{% endif %}>{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+    </td>
     <td>
         <button type="button" onclick="deleteSkill({{ loop.index0 }})">Löschen</button>
     </td>
@@ -22,17 +41,34 @@
 </table>
 
 <script>
-// In-place Edit
+// In-place Edit Name/DE
 document.querySelectorAll('.edit-skill-en, .edit-skill-de').forEach(input => {
     input.addEventListener('change', function() {
         const index = this.dataset.index;
         const en = document.querySelector(`.edit-skill-en[data-index="${index}"]`).value;
         const de = document.querySelector(`.edit-skill-de[data-index="${index}"]`).value;
+        const cat = document.querySelector(`.edit-skill-category[data-index="${index}"]`).value;
 
         fetch("/skills/edit", {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({index:index, name:en, name_de:de})
+            body: JSON.stringify({index:index, name:en, name_de:de, category:cat})
+        });
+    });
+});
+
+// In-place Edit Kategorie
+document.querySelectorAll('.edit-skill-category').forEach(select => {
+    select.addEventListener('change', function() {
+        const index = this.dataset.index;
+        const en = document.querySelector(`.edit-skill-en[data-index="${index}"]`).value;
+        const de = document.querySelector(`.edit-skill-de[data-index="${index}"]`).value;
+        const cat = this.value;
+
+        fetch("/skills/edit", {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({index:index, name:en, name_de:de, category:cat})
         });
     });
 });

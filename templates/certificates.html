@@ -1,31 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Zertifikate</h2>
+<h2>Zertifikate verwalten</h2>
 
-<!-- Add/Edit Certificate Form -->
 <h3>{% if edit_cert %}Zertifikat bearbeiten{% else %}Neues Zertifikat hinzufügen{% endif %}</h3>
-<form method="POST" action="{% if edit_cert %}/certificates/edit{% else %}/certificates{% endif %}">
+<form method="POST" id="cert-form">
   {% if edit_cert %}
     <input type="hidden" name="code" value="{{ edit_cert.code }}">
   {% endif %}
-  
-  <label>Code: <input type="text" name="code" value="{{ edit_cert.code if edit_cert else '' }}" {% if edit_cert %}readonly{% endif %} required></label><br>
-  <label>Issuer: <input type="text" name="issuer" value="{{ edit_cert.issuer if edit_cert else '' }}" required></label><br>
-  <label>Badge Title: <input type="text" name="badge" value="{{ edit_cert.badge if edit_cert else '' }}" required></label><br>
-  <label>Badge Image URL: <input type="text" name="badge_img" value="{{ edit_cert.badge_img if edit_cert else '' }}"></label><br>
-  <label>URL: <input type="text" name="url" value="{{ edit_cert.url if edit_cert else '' }}"></label><br>
-  <label>Von: <input type="date" name="from" value="{{ edit_cert.from if edit_cert else '' }}"></label><br>
-  <label>Bis: <input type="date" name="until" value="{{ edit_cert.until if edit_cert else '' }}"></label><br>
-  
-  <label>Skills:</label><br>
-  {% for skill in skills %}
-    <label>
-      <input type="checkbox" name="skills" value="{{ skill }}"
-        {% if edit_cert and skill in edit_cert.skills %}checked{% endif %}>
-      {{ skill }}
-    </label><br>
-  {% endfor %}
-  
+
+  <label>Code:
+    <input type="text" name="code" value="{{ edit_cert.code if edit_cert else '' }}" {% if edit_cert %}readonly{% endif %} required>
+  </label>
+  <label>Issuer:
+    <input type="text" name="issuer" value="{{ edit_cert.issuer if edit_cert else '' }}" required>
+  </label>
+  <label>Badge Title:
+    <input type="text" name="badge" value="{{ edit_cert.badge if edit_cert else '' }}" required>
+  </label>
+  <label>Badge Image URL:
+    <input type="text" name="badge_img" value="{{ edit_cert.badge_img if edit_cert else '' }}">
+  </label>
+  <label>URL:
+    <input type="text" name="url" value="{{ edit_cert.url if edit_cert else '' }}">
+  </label>
+  <label>Von:
+    <input type="date" name="from" value="{{ edit_cert.from if edit_cert else '' }}">
+  </label>
+  <label>Bis:
+    <input type="date" name="until" value="{{ edit_cert.until if edit_cert else '' }}">
+  </label>
+  <label>Skills:
+    <select name="skills" id="cert_skills" multiple>
+      {% for s in skills %}
+      <option value="{{ s }}" {% if edit_cert and s in edit_cert.skills %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </label>
   <button type="submit">{% if edit_cert %}Speichern{% else %}Hinzufügen{% endif %}</button>
   {% if edit_cert %}
     <a href="/certificates">Abbrechen</a>
@@ -34,37 +44,32 @@
 
 <hr>
 
-<h3>Alle Zertifikate</h3>
-<table border="1" cellpadding="5">
-  <tr>
-    <th>Code</th>
-    <th>Issuer</th>
-    <th>Badge</th>
-    <th>Von</th>
-    <th>Bis</th>
-    <th>Skills</th>
-    <th>Aktionen</th>
-  </tr>
-  {% for cert in certificates %}
-  <tr>
-    <td>{{ cert.code }}</td>
-    <td>{{ cert.issuer }}</td>
-    <td>{{ cert.badge }}</td>
-    <td>{{ cert.from }}</td>
-    <td>{{ cert.until or "" }}</td>
-    <td>{% for skill in cert.skills %}<span class="skill-badge">{{ skill }}</span>{% endfor %}</td>
-    <td><a href="{{ cert.url }}"><img style="max-width: 80px; height: auto;" src="{{ cert.badge_img }}"/></a></td>
-    <td>
-      <form method="POST" action="/certificates/edit" style="display:inline;">
-        <input type="hidden" name="code" value="{{ cert.code }}">
-        <button type="submit">Edit</button>
-      </form>
-      <form method="POST" action="/certificates/delete" style="display:inline;">
-        <input type="hidden" name="code" value="{{ cert.code }}">
-        <button type="submit">Delete</button>
-      </form>
-    </td>
-  </tr>
-  {% endfor %}
+<h3>Vorhandene Zertifikate</h3>
+<table>
+<tr><th>Code</th><th>Issuer</th><th>Badge</th><th>Von</th><th>Bis</th><th>Skills</th><th>Aktionen</th></tr>
+{% for cert in certificates %}
+<tr>
+  <td>{{ cert.code }}</td>
+  <td>{{ cert.issuer }}</td>
+  <td>{{ cert.badge }}</td>
+  <td>{{ cert.from }}</td>
+  <td>{{ cert.until }}</td>
+  <td>{% for s in cert.skills %}<span class="skill-badge">{{ s }}</span>{% endfor %}</td>
+  <td>
+    <form method="POST" action="/certificates/edit" style="display:inline;">
+      <input type="hidden" name="code" value="{{ cert.code }}">
+      <button type="submit">Bearbeiten</button>
+    </form>
+    <form method="POST" action="/certificates/delete" style="display:inline;">
+      <input type="hidden" name="code" value="{{ cert.code }}">
+      <button type="submit">Löschen</button>
+    </form>
+  </td>
+</tr>
+{% endfor %}
 </table>
+
+<script>
+new Choices('#cert_skills', { removeItemButton: true });
+</script>
 {% endblock %}

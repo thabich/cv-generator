@@ -2,10 +2,10 @@
 {% block content %}
 <h1>Job Titles verwalten</h1>
 
-<form id="add-jobtitle-form" method="POST" action="{{ url_for('jobtitles') }}">
+<form id="add-jobtitle-form" method="POST" action="{{ url_for('jobtitles_view') }}">
     <input type="text" name="name" placeholder="Job Title (EN)" required>
-    <input type="text" name="name_de" placeholder="Job Title (DE, optional)">
-    <button type="submit">Job Title hinzufügen</button>
+    <input type="text" name="name_de" placeholder="Job Title (DE)">
+    <button type="submit">Hinzufügen</button>
 </form>
 
 <table>
@@ -29,20 +29,17 @@ document.querySelectorAll('.edit-jobtitle-en, .edit-jobtitle-de').forEach(input 
         const de = document.querySelector(`.edit-jobtitle-de[data-index="${index}"]`).value;
 
         fetch("/jobtitles/edit", {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({index:index, name:en, name_de:de})
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({index:index,name:en,name_de:de})
         });
     });
 });
 
-function deleteJobTitle(index) {
-    if(confirm('Job Title wirklich löschen?')) {
-        fetch("/jobtitles/delete", {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({index:index})
-        }).then(() => location.reload());
+function deleteJobTitle(index){
+    if(confirm('Job Title wirklich löschen?')){
+        fetch("/jobtitles/delete",{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:index})})
+        .then(()=>location.reload());
     }
 }
 </script>
