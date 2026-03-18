@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CV Export</title>
+{% include "export/styles.html" %}
+</head>
+<body>
+    <h2>{{ config.get("first_name","") }} {{ config.get("last_name","") }}</h1>
+    <div class="contact">
+        {% if config.get("email") %}<div>E-Mail: {{ config.email }}</div>{% endif %}
+        {% if config.get("phone") %}<div>Telefon: {{ config.phone }}</div>{% endif %}
+        {% if config.get("website") %}
+            <div style="word-wrap: break-word;">Website: {{ config.website }}</div>
+        {% endif %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- export_form.html -->
+<form method="post">
+  <label for="language">Sprache / Language:</label>
+  <select name="language" id="language">
+    <option value="EN">English</option>
+    <option value="DE">Deutsch</option>
+  </select>
+
+  <!-- Skills-Auswahl -->
+  <label for="skills">Skills filtern (optional):</label>
+  <select multiple name="skills" id="skills">
+    {% for s in skills %}
+      <option value="{{ s.name }}">{{ s.name }}</option>
+    {% endfor %}
+  </select>
+
+  <label for="export_type">Export als:</label>
+  <select name="export_type">
+    <option value="pdf">PDF</option>
+    <option value="docx">DOCX</option>
+    <option value="html">HTML</option>
+  </select>
+
+  <button type="submit">Export</button>
+</form>
+{% endblock %}

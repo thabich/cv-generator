@@ -1,0 +1,23 @@
+<div class="project">
+    <div class="project-title">
+        {% if lang=="DE" %}{{ proj.title_de }}{% else %}{{ proj.title }}{% endif %}
+        <br>Role: {{ proj.jobtitle }}
+        <br>Period: {{ proj.from }} – {{ proj.until }}
+    </div>
+
+    <ul class="project-tasks">
+        {% for task in proj.tasks %}
+            <li class="project-task">
+                {% if lang=="DE" %}{{ task.description_de }}{% else %}{{ task.description }}{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% if proj.task_skills_summary %}
+    <div class="project-skills">
+        {% for s in proj.task_skills_summary %}
+            {{ s }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>

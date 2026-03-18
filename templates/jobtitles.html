@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Job Titles verwalten</h1>
 
-<form id="add-jobtitle-form" method="POST" action="{{ url_for('jobtitles_view') }}">
+<form id="add-jobtitle-form" method="POST" action="{{ url_for('jobtitles_bp.jobtitles_view') }}">
     <input type="text" name="name" placeholder="Job Title (EN)" required>
     <input type="text" name="name_de" placeholder="Job Title (DE)">
     <button type="submit">Hinzufügen</button>

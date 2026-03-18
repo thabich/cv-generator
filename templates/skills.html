@@ -3,7 +3,7 @@
 <h1>Skills verwalten</h1>
 
 <!-- Neues Skill hinzufügen -->
-<form id="add-skill-form" method="POST" action="{{ url_for('skills_view') }}">
+<form id="add-skill-form" method="POST" action="{{ url_for('skills_bp.skills_view') }}">
     <input type="text" name="name" placeholder="Skill Name (EN)" required>
     <input type="text" name="name_de" placeholder="Skill Name (DE, optional)">
     <label>Kategorie:

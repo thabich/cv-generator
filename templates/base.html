@@ -21,13 +21,14 @@
   <div class="container">
     <h1>CV Builder</h1>
     <nav>
-      <a href="{{ url_for('home') }}">Dashboard</a> |
-      <a href="{{ url_for('skills_view') }}">Skills</a> |
-      <a href="{{ url_for('categories_view') }}">Kategorien</a> |
-      <a href="{{ url_for('jobtitles_view') }}">Job Titles</a> |
-      <a href="{{ url_for('projects_view') }}">Projekte</a> |
-      <a href="{{ url_for('certificates_view') }}">Zertifikate</a> |
-      <a href="{{ url_for('export_view') }}">Export</a>
+      <a href="{{ url_for('home_bp.home') }}">Dashboard</a> |
+      <a href="{{ url_for('skills_bp.skills_view') }}">Skills</a> |
+      <a href="{{ url_for('categories_bp.categories_view') }}">Kategorien</a> |
+      <a href="{{ url_for('jobtitles_bp.jobtitles_view') }}">Job Titles</a> |
+      <a href="{{ url_for('projects_bp.projects_view') }}">Projekte</a> |
+      <a href="{{ url_for('certificates_bp.certificates_view') }}">Zertifikate</a> |
+      <a href="{{ url_for('export_bp.export_view') }}">Export</a>
+      <a href="{{ url_for('config_bp.config_view') }}">Config</a>
     </nav>
     <hr>
     {% block content %}{% endblock %}

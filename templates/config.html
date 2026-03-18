@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Konfiguration</h1>
+
+<form method="POST">
+  <div>
+    <label>Vorname:</label>
+    <input type="text" name="first_name" value="{{ config.first_name or '' }}">
+  </div>
+  <div>
+    <label>Name:</label>
+    <input type="text" name="last_name" value="{{ config.last_name or '' }}">
+  </div>
+  <div>
+    <label>E-Mail:</label>
+    <input type="email" name="email" value="{{ config.email or '' }}">
+  </div>
+  <div>
+    <label>Website:</label>
+    <input type="url" name="website" value="{{ config.website or '' }}">
+  </div>
+  <div>
+    <label>Telefonnummer:</label>
+    <input type="text" name="phone" value="{{ config.phone or '' }}">
+  </div>
+  <div>
+    <label>Custom Params:</label>
+    <textarea name="custom_params">{{ config.custom_params or '' }}</textarea>
+  </div>
+  <button type="submit">Speichern</button>
+</form>
+
+{% endblock %}

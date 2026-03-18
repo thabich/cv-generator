@@ -7,5 +7,5 @@ services:
     volumes:
       - ${DATA_DIR:-./data}:/app/data:/app/data   # Mount des Data-Verzeichnisses
     environment:
-      - FLASK_APP=app.py
+      - FLASK_APP=run.py
       - FLASK_ENV=production

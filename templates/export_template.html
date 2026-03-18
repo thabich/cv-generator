@@ -1,49 +1,116 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="{{ lang|lower }}">
 <head>
-<meta charset="UTF-8">
-<title>Skills Export</title>
-<style>
-body { font-family: Arial, sans-serif; color:#333; margin:2cm; }
-h1,h2,h3 { color:#004080; margin-bottom:0.5em; }
-h1 { border-bottom:2px solid #004080; padding-bottom:0.3em; }
-table { width:100%; border-collapse:collapse; margin-bottom:1.5em; }
-th,td { border:1px solid #aaa; padding:6px 8px; }
-th { background:#f0f8ff; }
-ul { margin:0; padding-left:1.2em; }
-.skill-header { color:#006600; margin-top:2em; margin-bottom:0.5em; }
-</style>
+  <meta charset="UTF-8">
+  <title>CV Export</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+
+    /* Header */
+    header {
+        background-color: #1A237E;
+        color: white;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 5px;
+    }
+    header h1 { margin: 0; font-size: 24px; }
+    header p { margin: 2px 0; font-size: 14px; }
+
+    /* Projekt-Block */
+    .project {
+        border-left: 4px solid #3949AB;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        background-color: #F5F5F5;
+        border-radius: 3px;
+    }
+    .project h2 { margin: 0; font-size: 20px; color: #1A237E; }
+    .project-info { font-size: 14px; margin-bottom: 5px; color: #555; }
+
+    /* Aufgaben-Tabelle */
+    table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+    th, td { border: 1px solid #BBB; padding: 5px; text-align: left; font-size: 13px; }
+    th { background-color: #E8EAF6; color: #1A237E; }
+
+    /* Skills-Zusammenfassung */
+    .project-skills {
+        margin-top: 5px;
+        font-weight: bold;
+        color: #0D47A1;
+        font-size: 13px;
+    }
+
+    /* Zertifikate */
+    .certificates { margin-top: 30px; }
+    .certificates h2 { color: #1A237E; font-size: 18px; }
+    .certificate {
+        border-left: 4px solid #3949AB;
+        padding: 5px 10px;
+        margin-bottom: 10px;
+        background-color: #F5F5F5;
+        border-radius: 3px;
+    }
+    .certificate a { color: #1A237E; text-decoration: none; }
+  </style>
 </head>
 <body>
-<h1>Skills Export</h1>
 
-{% if projects %}
-<h2>Projekte</h2>
-{% for proj in projects %}
-<h3>{{ proj.title_de or proj.title }} ({{ proj.jobtitle }})</h3>
-<ul>
-{% for task in proj.tasks %}
-{% if task.skills|select("in", selected_skills)|list %}
-<li>{{ task.description_de or task.description }}</li>
-{% endif %}
-{% endfor %}
-</ul>
-{% endfor %}
-{% endif %}
+<header>
+  <h1>{{ config.first_name }} {{ config.last_name }}</h1>
+  {% if config.email %}<p>Email: {{ config.email }}</p>{% endif %}
+  {% if config.website %}<p>Website: {{ config.website }}</p>{% endif %}
+  {% if config.phone %}<p>Telefon: {{ config.phone }}</p>{% endif %}
+</header>
 
-{% if certificates %}
-<h2>Zertifikate</h2>
-<table>
-<tr><th>Code</th><th>Badge</th><th>Issuer</th><th>Link</th></tr>
-{% for cert in certificates %}
-<tr>
-<td>{{ cert.code }}</td>
-<td>{{ cert.badge }}</td>
-<td>{{ cert.issuer }}</td>
-<td><a href="{{ cert.url }}">{{ cert.badge }}</a></td>
-</tr>
+{% for project in projects %}
+<div class="project">
+  <h2>{{ project.title if lang=='EN' else project.title_de }}</h2>
+
+  {% if project.jobtitle %}
+    <div class="project-info">
+      {% if lang=='EN' %}Role{% else %}Rolle{% endif %}: {{ project.jobtitle }}
+    </div>
+  {% endif %}
+
+  {% if project.from or project.until %}
+    <div class="project-info">
+      {% if lang=='EN' %}Period{% else %}Zeitraum{% endif %}: {{ project.from or '' }} - {{ project.until or '' }}
+    </div>
+  {% endif %}
+
+  {% if project.tasks %}
+  <table>
+    <tr>
+      <th>{% if lang=='EN' %}Task{% else %}Aufgabe{% endif %}</th>
+    </tr>
+    {% for task in project.tasks %}
+    <tr>
+      <td>{{ task.description if lang=='EN' else task.description_de }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  {% if project.task_skills_summary %}
+    <div class="project-skills">
+      {% if lang=='EN' %}Skills Summary{% else %}Zusammenfassung Skills{% endif %}: {{ project.task_skills_summary | join(", ") }}
+    </div>
+  {% endif %}
+  {% endif %}
+</div>
 {% endfor %}
-</table>
-{% endif %}
+
+<div class="certificates">
+  <h2>{% if lang=='EN' %}Certificates{% else %}Zertifikate{% endif %}</h2>
+  {% for cert in certificates %}
+  <div class="certificate">
+    <strong>{{ cert.badge }}</strong> - {{ cert.issuer }}
+    {% if cert.from or cert.until %} ({{ cert.from or "" }} - {{ cert.until or "" }}){% endif %}
+    {% if cert.skills %}<div>Skills: {{ cert.skills | join(", ") }}</div>{% endif %}
+    {% if cert.url %}<div>Link: <a href="{{ cert.url }}">{{ cert.url }}</a></div>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+
 </body>
 </html>

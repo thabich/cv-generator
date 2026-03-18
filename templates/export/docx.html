@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CV Export</title>
+{% include "export/styles.html" %}
+</head>
+<body>
+	<h2>Test</h2>
+<main>
+    {% for proj in projects %}
+        {% include "export/projects.html" %}
+    {% endfor %}
+    <div class="page-break"></div>
+        <h2>Certificates</h2>
+    {% for c in certificates|sort(attribute='code') %}
+        {% include "export/certificates.html" %}
+    {% endfor %}
+</main>
+
+{% include "export/footer.html" %}
+</body>
+</html>
