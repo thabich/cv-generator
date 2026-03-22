@@ -62,14 +62,68 @@ h2 {
   background: #fff;
 }
 .project-title {
-  font-size: 12pt;
+  font-size:1.5em;
   font-weight: bold;
-  color: #2C3E50;
+  color: #004E78;
 }
+
+.project-role {
+  color: #0077b8;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 0.2em;
+}
+
+.project-period {
+  color: #555;
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.project-tasks {
+  padding-inline-start: 0px;
+  list-style-type: none;
+}
+
 .project-task {
-  margin-top: 4px;
-  margin-left: 12px;
+  margin-top: 40px;
+  margin-left: 0px;
+  list-style: none; /* Standard-Bullet abschalten */
 }
+.project-task h1 {
+    font-size: 1.1em;
+    color: #3593CB;
+}
+
+/* Innere Unterpunkte */
+.project-task ul {
+  list-style: none; /* Bullet weg */
+  margin: 0;
+  padding: 0;
+  padding-inline-start: 40px;
+}
+
+.project-task ul li {
+  padding-left: 2em;   /* Platz für Symbol */
+  text-indent: -2em;   /* hängender Einzug */
+  margin-top: 0.5em;
+
+}
+
+.project-task ul li::before {
+  content: "";
+  background: url("{{ request.url_root }}{{ url_for('static', filename='list-icon.svg') }}") no-repeat center center;
+  background-size: 1.5em 1.5em; /* skalierbar */
+  width: 1.5em;
+  height: 1.5em;
+  display: inline-block;
+  margin-right: 0.5em;
+  position: relative;
+  top: 0.5em; 
+}
+
+
+
 .project-skills {
   margin-top: 6px;
   background-color: #EAF2F8;

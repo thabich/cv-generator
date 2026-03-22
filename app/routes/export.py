@@ -3,6 +3,7 @@ from io import BytesIO
 from datetime import datetime
 import os
 import yaml
+from markdown2 import markdown as md
 
 from ..utils import load_json, DATA_FILES, DATA_DIR
 from ..services.export_service import prepare_export_data
@@ -13,6 +14,10 @@ from ..render.html_renderer import render_export_html
 export_bp = Blueprint("export_bp", __name__, template_folder="../templates")
 
 CONFIG_FILE = os.path.join(DATA_DIR, "config.yaml")
+
+@export_bp.app_template_filter("markdownify")
+def markdownify_filter(text):
+    return md(text)
 
 
 @export_bp.route("/", methods=["GET", "POST"])

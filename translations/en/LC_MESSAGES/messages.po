@@ -1,0 +1,35 @@
+msgid "Projects"
+msgstr "Projects"
+
+msgid "Certificates"
+msgstr "Certificates"
+
+msgid "Skills"
+msgstr "Skills"
+
+msgid "Project"
+msgstr "Project"
+
+msgid "Role"
+msgstr "Role"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Tasks"
+msgstr "Tasks"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Phone"
+msgstr "Phone"
+
+msgid "Website"
+msgstr "Website"

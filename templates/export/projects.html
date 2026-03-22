@@ -1,14 +1,14 @@
 <div class="project">
-    <div class="project-title">
-        {% if lang=="DE" %}{{ proj.title_de }}{% else %}{{ proj.title }}{% endif %}
-        <br>Role: {{ proj.jobtitle }}
-        <br>Period: {{ proj.from }} – {{ proj.until }}
+    <div class="project-meta">
+        <div class="project-title">{% if lang=="DE" %}{{ proj.title_de }}{% else %}{{ proj.title }}{% endif %}</div>
+        <div class="project-role">{{ proj.jobtitle }}</div>
+        <div class="project-period">{{ proj.from }} – {{ proj.until }}</div>
     </div>
 
     <ul class="project-tasks">
         {% for task in proj.tasks %}
             <li class="project-task">
-                {% if lang=="DE" %}{{ task.description_de }}{% else %}{{ task.description }}{% endif %}
+                {% if lang=="DE" %}{{ task.description_de | markdownify | safe  }}{% else %}{{ task.description | markdownify | safe}}{% endif %}
             </li>
         {% endfor %}
     </ul>
