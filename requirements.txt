@@ -3,3 +3,4 @@ Flask-Babel
 WeasyPrint
 pyyaml
 docxtpl
+markdown2

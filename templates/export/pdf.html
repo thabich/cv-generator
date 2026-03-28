@@ -10,9 +10,6 @@
 {% include "export/header.html" %}
 
 <main>
-    {% for proj in projects %}
-        {% include "export/projects.html" %}
-    {% endfor %}
     {% if certificates|length > 0 %}
     <div class="page-break"></div>
     <h2>Certificates</h2>
@@ -20,6 +17,9 @@
         {% include "export/certificates.html" %}
     {% endfor %}
     {% endif %}
+    {% for proj in projects %}
+        {% include "export/projects.html" %}
+    {% endfor %}
 </main>
 
 {% include "export/footer.html" %}
